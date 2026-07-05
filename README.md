@@ -67,18 +67,14 @@ Valida que un correo electrónico tenga un formato correcto.
 - `true` si el correo es válido.
 - `false` si el formato es incorrecto.
 
-### Ejemplo
+### Codigo
 
 ```javascript
-console.log(validarCorreo("usuario@gmail.com"));
+function validarCorreo(correo) {
+    const expresionRegular = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return expresionRegular.test(correo);
+}
 ```
-
-Resultado:
-
-```
-true
-```
-
 ---
 
 ## 2. soloLetras(texto)
@@ -96,16 +92,13 @@ Permite únicamente letras mayúsculas, minúsculas, espacios y vocales acentuad
 - `true` si el texto contiene únicamente letras.
 - `false` si contiene números o símbolos.
 
-### Ejemplo
+### Codigo
 
 ```javascript
-console.log(soloLetras("José Hernández"));
-```
-
-Resultado
-
-```
-true
+function soloLetras(texto) {
+    const expresionRegular = /^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$/;
+    return expresionRegular.test(texto);
+}
 ```
 
 ---
@@ -126,17 +119,18 @@ Valida que un número no exceda la longitud máxima permitida.
 - `true` si la longitud es válida.
 - `false` si supera el límite.
 
-### Ejemplo
+### Codigo
 
 ```javascript
-console.log(validarLongitud(1234567890,10));
+function validarLongitud(numero, maxLongitud) {
+    if (numero === null || numero === undefined) {
+        return false;
+    }
+    const cadena = String(numero).trim();
+    return cadena.length <= maxLongitud;
+}
 ```
 
-Resultado
-
-```
-true
-```
 
 ---
 
@@ -154,18 +148,25 @@ Calcula la edad del usuario a partir de su fecha de nacimiento.
 
 La edad como número entero.
 
-### Ejemplo
+### Codigo
 
 ```javascript
-console.log(calcularEdad("2003-09-15"));
+function calcularEdad(fechaNacimiento) {
+    if (!fechaNacimiento) {
+        return 0;
+    }
+    const hoy = new Date();
+    const fechaCumple = new Date(fechaNacimiento);
+    // Evitar desfase de zona horaria al crear el objeto Date
+    const cumpleUTC = new Date(fechaCumple.getUTCFullYear(), fechaCumple.getUTCMonth(), fechaCumple.getUTCDate());
+    let edadCalculada = hoy.getFullYear() - cumpleUTC.getFullYear();
+    const diferenciaMeses = hoy.getMonth() - cumpleUTC.getMonth();
+    if (diferenciaMeses < 0 || (diferenciaMeses === 0 && hoy.getDate() < cumpleUTC.getDate())) {
+        edadCalculada--;
+    }
+    return edadCalculada;
+}
 ```
-
-Resultado
-
-```
-21
-```
-
 ---
 
 ## 5. esMayorDeEdad(fechaNacimiento)
@@ -183,18 +184,14 @@ Determina si una persona es mayor de edad.
 - `true` si tiene 18 años o más.
 - `false` en caso contrario.
 
-### Ejemplo
+### Codigo
 
 ```javascript
-console.log(esMayorDeEdad("2008-05-12"));
+function esMayorDeEdad(fechaNacimiento) {
+    const edad = calcularEdad(fechaNacimiento);
+    return edad >= 18;
+}
 ```
-
-Resultado
-
-```
-false
-```
-
 ---
 
 ## 6. validarPassword(password)
@@ -218,16 +215,13 @@ Valida que una contraseña cumpla con los siguientes requisitos:
 - `true` si cumple todos los requisitos.
 - `false` en caso contrario.
 
-### Ejemplo
+### Codigo
 
 ```javascript
-console.log(validarPassword("Hola123*"));
-```
-
-Resultado
-
-```
-true
+function validarPassword(contrasena) {
+    const expresionRegular = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._\-#+=\[\]{}()^|~`:;,<>\/\\\"\'\`])[A-Za-z\d@$!%*?&._\-#+=\[\]{}()^|~`:;,<>\/\\\"\'\`]{8,}$/;
+    return expresionRegular.test(contrasena);
+}
 ```
 
 ---
@@ -249,18 +243,17 @@ Valida que una CURP mexicana tenga un formato correcto.
 - `true` si la CURP es válida.
 - `false` si el formato es incorrecto.
 
-### Ejemplo
+### Codigo
 
 ```javascript
-console.log(validarCURP("GODE561231HDFRRN09"));
+function validarCURP(curp) {
+    if (!curp) {
+        return false;
+    }
+    const expresionRegular = /^[A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z\d]\d$/;
+    return expresionRegular.test(curp.toUpperCase().trim());
+}
 ```
-
-Resultado
-
-```
-true
-```
-
 ---
 
 ## 8. validarTelefono(telefono)
@@ -280,18 +273,18 @@ Acepta espacios, guiones y paréntesis.
 - `true` si el teléfono es válido.
 - `false` si no cumple el formato.
 
-### Ejemplo
+### Codigo
 
 ```javascript
-console.log(validarTelefono("(951) 123-4567"));
+function validarTelefono(telefono) {
+    if (!telefono) {
+        return false;
+    }
+    const limpio = String(telefono).replace(/[\s\-()]/g, '');
+    const expresionRegular = /^\d{10}$/;
+    return expresionRegular.test(limpio);
+}
 ```
-
-Resultado
-
-```
-true
-```
-
 ---
 
 # Integración del proyecto
@@ -340,15 +333,11 @@ Antes de permitir el acceso al sistema.
 
 ## Consola ejecutando las funciones
 
-> Agregar captura aquí.
-
-![Captura consola](img/captura-consola.png)
+![Captura consola](img/consola.png)
 
 ---
 
 ## Formulario funcionando
-
-> Agregar captura aquí.
 
 ![Formulario](img/formulario.png)
 
@@ -356,15 +345,11 @@ Antes de permitir el acceso al sistema.
 
 ## Modal mostrando la edad
 
-> Agregar captura aquí.
-
 ![Modal](img/modal.png)
 
 ---
 
 ## Login
-
-> Agregar captura aquí.
 
 ![Login](img/login.png)
 
@@ -372,32 +357,11 @@ Antes de permitir el acceso al sistema.
 
 # Video demostrativo
 
-Agregar aquí el enlace al video (máximo 1 minuto).
-
-Ejemplo:
-
-```
 https://drive.google.com/file/d/1RvQioZC8xlm7sj_GDw06DjQaz0D-WDGm/view?usp=sharing
-```
----
-
-# GitHub Pages
-
-Repositorio:
-
-```
-Pegar aquí el enlace del repositorio
-```
-
-GitHub Pages:
-
-```
-Pegar aquí el enlace de GitHub Pages
-```
 
 ---
 
-# 🛠 Tecnologías utilizadas
+# Tecnologías utilizadas
 
 - HTML5
 - CSS3
