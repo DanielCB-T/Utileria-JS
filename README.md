@@ -50,7 +50,7 @@ O si el archivo se encuentra en la misma carpeta:
 
 ---
 
-# 📖 Funciones de la librería
+# Funciones de la librería
 
 ## 1. validarCorreo(correo)
 
